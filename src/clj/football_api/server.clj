@@ -1,7 +1,10 @@
 (ns football-api.server
-  (:require [football-api.handler :refer [app]]
+  (:require
+            [football-api.handler :refer [app]]
             [config.core :refer [env]]
-            [ring.adapter.jetty :refer [run-jetty]])
+            [ring.adapter.jetty :refer [run-jetty]]
+  )
+
   (:gen-class))
 
  (defn -main [& args]

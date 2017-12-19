@@ -1,32 +1,40 @@
 (ns football-api.core
     (:require [reagent.core :as reagent :refer [atom]]
               [secretary.core :as secretary :include-macros true]
-              [accountant.core :as accountant]))
+              [cljs.core.async :refer [<!]]
+              [cljs-http.client :as http]
+              [accountant.core :as accountant]
+              [football-api.pages.home :as home]
+              [football-api.pages.about :as about]
+	)
+	(:require-macros [cljs.core.async.macros :refer [go]]))
 
-;; -------------------------
-;; Views
 
-(defn home-page []
-  [:div [:h2 "Welcome to football_api"]
-   [:div [:a {:href "/about"} "go to about page"]]])
+(def log (.-log js/console))
 
-(defn about-page []
-  [:div [:h2 "About football_api"]
-   [:div [:a {:href "/"} "go to the home page"]]])
+
+
+(defn handler2 [response]
+	(log (str response)))
+
+; @SOURCE: https://github.com/r0man/cljs-http
+(defn test_ajax_call []
+	(go (let [response (<! (http/get "/artists/top"))]
+		    (prn (:body response)))))
 
 ;; -------------------------
 ;; Routes
 
-(def page (atom #'home-page))
+(def page (atom #'home/home-page))
 
 (defn current-page []
-  [:div [@page]])
+  [:div [:span "Here is app..."] [@page] [:button {:on-click test_ajax_call} "test ajax call to (/artists/top)"]])
 
 (secretary/defroute "/" []
-  (reset! page #'home-page))
+  (reset! page #'home/home-page))
 
 (secretary/defroute "/about" []
-  (reset! page #'about-page))
+  (reset! page #'about/about-page))
 
 ;; -------------------------
 ;; Initialize app

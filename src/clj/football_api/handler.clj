@@ -1,9 +1,14 @@
 (ns football-api.handler
-  (:require [compojure.core :refer [GET defroutes]]
+  (:require
+            [compojure.core :refer [GET defroutes]]
             [compojure.route :refer [not-found resources]]
             [hiccup.page :refer [include-js include-css html5]]
             [football_api.middleware :refer [wrap-middleware]]
-            [config.core :refer [env]]))
+            [config.core :refer [env]]
+            [ring.middleware.json :refer [wrap-json-response]]
+            [ring.util.response :refer [response]]
+  ))
+
 
 (def mount-target
   [:div#app
@@ -12,12 +17,14 @@
        [:b "lein figwheel"]
        " in order to start the compiler"]])
 
+
 (defn head []
   [:head
    [:meta {:charset "utf-8"}]
    [:meta {:name "viewport"
            :content "width=device-width, initial-scale=1"}]
    (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))])
+
 
 (defn loading-page []
   (html5
@@ -27,10 +34,15 @@
      (include-js "/js/app.js")]))
 
 
+(defn artists-top [request]
+	(response {:artists "dadada"}))
+
+
 (defroutes routes
   (GET "/" [] (loading-page))
   (GET "/about" [] (loading-page))
-  
+  (GET "/artists/top" [] (wrap-json-response artists-top))
+
   (resources "/")
   (not-found "Not Found"))
 
