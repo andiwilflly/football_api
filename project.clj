@@ -8,6 +8,9 @@
                  [ring-server "0.5.0"]
                  [reagent "0.7.0"]
                  [reagent-utils "0.2.1"]
+
+                 [com.taoensso/timbre "4.10.0"]
+
                  [ring "1.6.2"]
                  [ring/ring-json "0.4.0"]
                  [ring/ring-defaults "0.3.1"]
