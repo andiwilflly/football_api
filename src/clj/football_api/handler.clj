@@ -8,7 +8,9 @@
             [config.core :refer [env]]
             [ring.middleware.json :refer [wrap-json-response]]
             [ring.util.response :refer [response]]
-            [taoensso.timbre :as timbre :refer [log]]
+
+            [taoensso.timbre :as timbre :refer [info]]
+            [cheshire.core :as json]
   ))
 
 
@@ -38,8 +40,8 @@
 
 (def a(atom 6))
 (defn callback [resp]
-	(log " ===== ======== =====" (str resp))
-	(reset! a 6789))
+	(info " ===== ======== =====" (str resp))
+	(reset! a  (str resp)))
 
 (ajax/GET "http://ws.audioscrobbler.com/2.0/?method=album.search&album=believe&api_key=fb9d42de15720bcb20e6ed6fc5016a4c&format=json"
                {:handler callback})
@@ -51,7 +53,7 @@
 	:artists "??" }))
 
 (defn artists-top [request]
-	(response {:artists @a }))
+	(response @a))
 
 
 (defroutes routes
