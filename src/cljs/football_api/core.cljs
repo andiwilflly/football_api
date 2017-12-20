@@ -4,15 +4,14 @@
               [cljs.core.async :refer [<!]]
               [cljs-http.client :as http]
               [accountant.core :as accountant]
-              [football-api.pages.home :as home]
-              [football-api.pages.about :as about]
+              [football-api.pages.home_page :as home_page]
+              [football-api.pages.about_page :as about_page]
+              [football-api.models.test_model :as test_model]
 	)
 	(:require-macros [cljs.core.async.macros :refer [go]]))
 
 
 (def log (.-log js/console))
-
-
 
 (defn handler2 [response]
 	(log (str response)))
@@ -25,16 +24,17 @@
 ;; -------------------------
 ;; Routes
 
-(def page (atom #'home/home-page))
+(def page (atom #'home_page/render))
 
 (defn current-page []
-  [:div [:span "Here is app..."] [@page] [:button {:on-click test_ajax_call} "test ajax call to (/artists/top)"]])
+	(log "render layout")
+    [:div [:span "@test_atom: "] @test_model/test_atom [@page] [:button {:on-click test_ajax_call} "test ajax call to (/artists/top)"]])
 
 (secretary/defroute "/" []
-  (reset! page #'home/home-page))
+  (reset! page #'home_page/render))
 
 (secretary/defroute "/about" []
-  (reset! page #'about/about-page))
+  (reset! page #'about_page/render))
 
 ;; -------------------------
 ;; Initialize app

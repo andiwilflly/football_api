@@ -1,6 +1,9 @@
-(ns football-api.pages.about
+(ns football-api.pages.about_page
 	(:require [reagent.core :as reagent :refer [atom]]))
 
-(defn about-page []
+(def log (.-log js/console))
+
+(defn render []
+	(log "@render About page")
 	[:div [:h2 "About page..."]
 	 [:div [:a {:href "/"} "go to home page"]]])
