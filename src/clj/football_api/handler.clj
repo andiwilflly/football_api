@@ -2,6 +2,7 @@
   (:require
             [compojure.core :refer [GET defroutes]]
             [compojure.route :refer [not-found resources]]
+            [ajax.core :as ajax]
             [hiccup.page :refer [include-js include-css html5]]
             [football_api.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]
@@ -34,16 +35,22 @@
      (include-js "/js/app.js")]))
 
 
+(defn handler [resp] (response {
+	:status 200
+    :content-type "application/json; charset=UTF-8"
+	:artists "??" }))
+
 (defn artists-top [request]
-	(response {:artists "dadada"}))
+	(response {:artists "[ARTISTS]" }))
 
 
 (defroutes routes
-  (GET "/" [] (loading-page))
-  (GET "/about" [] (loading-page))
-  (GET "/artists/top" [] (wrap-json-response artists-top))
+    (GET "/" [] (loading-page))
+    (GET "/about" [] (loading-page))
+	(GET "/user/:userId" [userId] (loading-page))
+    (GET "/artists/top" [] (wrap-json-response artists-top))
 
-  (resources "/")
-  (not-found "Not Found"))
+    (resources "/")
+    (not-found "Not Found"))
 
 (def app (wrap-middleware #'routes))

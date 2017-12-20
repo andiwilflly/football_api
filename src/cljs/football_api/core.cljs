@@ -10,7 +10,7 @@
 	)
 	(:require-macros [cljs.core.async.macros :refer [go]]))
 
-
+(devtools.core/set-pref! :dont-detect-custom-formatters true)
 (def log (.-log js/console))
 
 (defn handler2 [response]
@@ -35,6 +35,9 @@
 
 (secretary/defroute "/about" []
   (reset! page #'about_page/render))
+
+(secretary/defroute "/user/:userId" [userId]
+          (js/console.log (str userId)))
 
 ;; -------------------------
 ;; Initialize app
