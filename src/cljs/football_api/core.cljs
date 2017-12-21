@@ -7,6 +7,7 @@
               [football-api.pages.home_page :as home_page]
               [football-api.pages.about_page :as about_page]
               [football-api.models.test_model :as test_model]
+              [football-api.models.artists_model :as artists_model]
 	)
 	(:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -17,9 +18,12 @@
 	(log (str response)))
 
 ; @SOURCE: https://github.com/r0man/cljs-http
+(def artists_top (atom (array-map)))
 (defn test_ajax_call []
 	(go (let [response (<! (http/get "/artists/top"))]
-		    (prn (:body (response))))))
+		    (prn  (get-in (:body response) [:album]))
+		    (artists_model/add_artist (get-in (:body response) [:album]))
+		    )))
 
 ;; -------------------------
 ;; Routes

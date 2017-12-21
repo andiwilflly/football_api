@@ -31,7 +31,7 @@
    (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))])
 
 
-(def a(atom 6))
+(def artists(atom 6))
 
 (defn loading-page []
   (html5
@@ -42,32 +42,25 @@
 
 
 (defn callback [resp]
-	(info " ===== ======== =====" (vec resp))
-	(reset! a  resp))
+	(reset! artists  resp))
 
 (ajax/GET "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=fb9d42de15720bcb20e6ed6fc5016a4c&artist=Cher&album=Believe&format=json"
                {:handler callback})
 
 
-(defn handler [resp] (response {
-	:status 200
-    :content-type "application/json; charset=UTF-8"
-	:artists "??" }))
-
 (defn artists-top [request]
-	(response @a))
+	(response @artists))
 
 
 (defroutes routes
     (GET "/" [] (loading-page))
     (GET "/about" [] (loading-page))
 	(GET "/user/:userId" [userId] (loading-page))
-    (GET "/artists/top" [] (response @a))
+    (GET "/artists/top" [] (response@artists))
 
     (resources "/")
     (not-found "Not Found"))
 
-;(def app (wrap-middleware #'routes))
 (def app (-> routes (wrap-json-body)
              (wrap-json-response)
              (wrap-defaults api-defaults)))
