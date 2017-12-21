@@ -1,4 +1,4 @@
-(ns football-api.models.artists_model
+(ns football-api.models.artists-model
 	(:require
 		[reagent.core :as reagent :refer [atom]]
 		))
@@ -6,7 +6,7 @@
 (def log (.-log js/console))
 
 
-(def artists_atom (atom {:name "Default name3"}))
+(def artists_atom (atom {}))
 
 ; Private
 (defn- on_add_artist [key atom old new] (log new))
