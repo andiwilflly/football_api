@@ -19,7 +19,7 @@
 ; @SOURCE: https://github.com/r0man/cljs-http
 (defn test_ajax_call []
 	(go (let [response (<! (http/get "/artists/top"))]
-		    (prn (:body response)))))
+		    (prn (:body (response))))))
 
 ;; -------------------------
 ;; Routes

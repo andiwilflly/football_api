@@ -6,8 +6,9 @@
             [hiccup.page :refer [include-js include-css html5]]
             [football_api.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]
-            [ring.middleware.json :refer [wrap-json-response]]
+            [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.util.response :refer [response]]
+            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
 
             [taoensso.timbre :as timbre :refer [info]]
             [cheshire.core :as json]
@@ -30,6 +31,8 @@
    (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))])
 
 
+(def a(atom 6))
+
 (defn loading-page []
   (html5
     (head)
@@ -38,12 +41,11 @@
      (include-js "/js/app.js")]))
 
 
-(def a(atom 6))
 (defn callback [resp]
-	(info " ===== ======== =====" (str resp))
-	(reset! a  (str resp)))
+	(info " ===== ======== =====" (vec resp))
+	(reset! a  resp))
 
-(ajax/GET "http://ws.audioscrobbler.com/2.0/?method=album.search&album=believe&api_key=fb9d42de15720bcb20e6ed6fc5016a4c&format=json"
+(ajax/GET "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=fb9d42de15720bcb20e6ed6fc5016a4c&artist=Cher&album=Believe&format=json"
                {:handler callback})
 
 
@@ -60,9 +62,12 @@
     (GET "/" [] (loading-page))
     (GET "/about" [] (loading-page))
 	(GET "/user/:userId" [userId] (loading-page))
-    (GET "/artists/top" [] (wrap-json-response artists-top))
+    (GET "/artists/top" [] (response @a))
 
     (resources "/")
     (not-found "Not Found"))
 
-(def app (wrap-middleware #'routes))
+;(def app (wrap-middleware #'routes))
+(def app (-> routes (wrap-json-body)
+             (wrap-json-response)
+             (wrap-defaults api-defaults)))
