@@ -52,11 +52,21 @@
 	(response @artists))
 
 
+(defn album_data [artist album]
+	(info ">>>>>>>>>>> <<<<<<<<<<<<<<WE HERE!!!>>>>>>>>>>>>>>")
+	(response {:artist artist :album album}))
+
+(defn get_album [artist album]
+	(ajax/GET "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=fb9d42de15720bcb20e6ed6fc5016a4c&artist=Cher&album=Believe&format=json"
+	          {:handler album_data}))
+
+
 (defroutes routes
     (GET "/" [] (loading-page))
     (GET "/about" [] (loading-page))
 	(GET "/user/:userId" [userId] (loading-page))
     (GET "/artists/top" [] (response@artists))
+    (GET "/album/:artist/:album" [artist album] (get_album artist album))
 
     (resources "/")
     (not-found "Not Found"))
