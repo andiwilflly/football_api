@@ -12,6 +12,8 @@
 
             [taoensso.timbre :as timbre :refer [info]]
             [cheshire.core :as json]
+
+            [clojure.core.async :as async]
   ))
 
 
@@ -67,6 +69,23 @@
 	(GET "/user/:userId" [userId] (loading-page))
     (GET "/artists/top" [] (response@artists))
     (GET "/album/:artist/:album" [artist album] (get_album artist album))
+
+
+	(GET "/divide" []
+	     :return {:result Float}
+	     :query-params [x :- Long, y :- Long]
+	     :summary "divide two numbers together"
+	     (let [chan (async/chan)]
+		     (future
+			     (async/go
+			      (async/<! (async/timeout 2500))
+			      (try
+				      (async/>! chan (ok {:result (float (/ x y))}))
+				      (catch Throwable e
+					      (async/>! chan e))
+				      (finally
+					      (async/close! chan)))))
+		     chan))
 
     (resources "/")
     (not-found "Not Found"))

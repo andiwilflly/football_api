@@ -14,5 +14,3 @@ pom.xml.asc
 /.env
 .idea/
 /.sass-cache
-.idea/inspectionProfiles/
-/figwheel_server.log
