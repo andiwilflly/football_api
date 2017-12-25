@@ -11,6 +11,9 @@
 
                  [com.taoensso/timbre "4.10.0"]
 
+                 [manifold "0.1.6"]
+                 [metosin/compojure-api "2.0.0-alpha16"]
+
                  [ring "1.6.2"]
                  [ring/ring-json "0.4.0"]
                  [ring/ring-defaults "0.3.1"]
@@ -30,7 +33,7 @@
             [lein-asset-minifier "0.2.7"
              :exclusions [org.clojure/clojure]]]
 
-  :ring {:handler football-api.handler/app
+  :ring {:handler football-api.async-handler/app
          :uberwar-name "football_api.war"}
 
   :min-lein-version "2.5.0"
@@ -85,7 +88,7 @@
    :nrepl-middleware ["cemerick.piggieback/wrap-cljs-repl"
                       ]
    :css-dirs ["resources/public/css"]
-   :ring-handler football-api.handler/app}
+   :ring-handler football-api.async-handler/app}
 
 
 

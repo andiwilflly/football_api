@@ -20,8 +20,8 @@
 ; @SOURCE: https://github.com/r0man/cljs-http
 (def artists_top (atom (array-map)))
 (defn test_ajax_call []
-	(go (let [response (<! (http/get "/artists/top"))]
-		    (prn  (get-in (:body response) [:album]))
+	(go (let [response (<! (http/get "/hello-async?name=test42"))]
+		    (prn  (:body response))
 		    (artists-model/add_artist (get-in (:body response) [:album]))
 		    )))
 
@@ -32,7 +32,7 @@
 
 (defn current-page []
 	(log "render layout")
-    [:div [:span "@test_atom: "] @test_model/test_atom [@page] [:button {:on-click test_ajax_call} "test ajax call to (/artists/top)"]])
+    [:div [:span "@test_atom: "] @test_model/test_atom [@page] [:button {:on-click test_ajax_call} "test ajax call to (/hello-async?name=test42)"]])
 
 (secretary/defroute "/" []
   (reset! page #'home_page/render))

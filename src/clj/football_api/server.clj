@@ -1,6 +1,6 @@
 (ns football-api.server
   (:require
-            [football-api.handler :refer [app]]
+            [football-api.async-handler :refer [app]]
             [config.core :refer [env]]
             [ring.adapter.jetty :refer [run-jetty]]
   )
