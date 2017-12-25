@@ -12,4 +12,6 @@ pom.xml.asc
 /.repl
 *.log
 /.env
+.idea/
 /.sass-cache
+.idea/inspectionProfiles/
